@@ -13,6 +13,20 @@
         tools:layout="@layout/login_fragment"
         >
 
+        <action
+            android:id="@+id/action_loginFragment_to_postsFragment"
+            app:destination="@id/postsFragment"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/postsFragment"
+        android:name="com.senacor.postbook.ui.posts.PostsFragment"
+        android:label="PostsFragment"
+        >
+        <argument
+            android:name="userId"
+            app:argType="integer"
+            />
     </fragment>
 
 
