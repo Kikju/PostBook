@@ -6,6 +6,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.senacor.postbook.R
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,18 +17,41 @@ class PostsFragment: Fragment(R.layout.posts_fragment) {
 
     private val args: PostsFragmentArgs by navArgs()
     private val viewModel: PostsViewModel by viewModels()
-    private val adapter = PostsAdapter()
-
+    private val adapter = PostsAdapter(
+        onItemClick = {
+            println(it)
+        },
+        onFavoriteClick = {
+            viewModel.updateFavoritePost(it)
+        }
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.setUserId(args.userId)
 
         swipeRefreshLayout.setOnRefreshListener {
             refreshPosts()
         }
 
         recycler.layoutManager = LinearLayoutManager(requireContext())
+        recycler.addItemDecoration(DividerItemDecoration(requireContext(), (recycler.layoutManager as LinearLayoutManager).orientation))
         recycler.adapter = adapter
+
+        bottomNavigation.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.bottom_all -> {
+                    viewModel.setFavorite(false)
+                    true
+                }
+                R.id.bottom_favorite -> {
+                    viewModel.setFavorite(true)
+                    true
+                }
+                else -> false
+            }
+        }
 
         observeUi()
 
@@ -54,6 +78,6 @@ class PostsFragment: Fragment(R.layout.posts_fragment) {
     }
 
     private fun refreshPosts() {
-        viewModel.refreshPosts(args.userId)
+        viewModel.refreshPosts()
     }
 }

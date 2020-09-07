@@ -17,13 +17,29 @@ data class Post(
     override fun getId(): Any = id
 }
 
-class PostsViewHolder(parent: ViewGroup): BaseViewHolder<Post>(parent, R.layout.item_post) {
+class PostsViewHolder(
+    parent: ViewGroup,
+    private val onItemClick: (Post) -> Unit,
+    private val onFavoriteClick: (Post) -> Unit,
+): BaseViewHolder<Post>(parent, R.layout.item_post) {
     override fun bind(item: Post) {
         itemView.title.setText(item.title)
         itemView.body.setText(item.body)
+        itemView.favoriteButton.setImageResource(if (item.favorite) R.drawable.ic_baseline_star_24 else R.drawable.ic_baseline_star_border_24)
+        itemView.setOnClickListener { onItemClick(item) }
+        itemView.favoriteButton.setOnClickListener { onFavoriteClick(item.copy(favorite = !item.favorite)) }
     }
 }
 
-class PostsAdapter: BaseListAdapter<Post>(
-    viewHolderCreator { PostsViewHolder(it) }
+class PostsAdapter(
+    onItemClick: (Post) -> Unit,
+    onFavoriteClick: (Post) -> Unit,
+): BaseListAdapter<Post>(
+    viewHolderCreator {
+        PostsViewHolder(
+            it,
+            onItemClick,
+            onFavoriteClick
+        )
+    }
 )

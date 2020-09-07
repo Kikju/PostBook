@@ -17,13 +17,19 @@ data class Post(
 @Dao
 interface PostDao {
 
-    @Query("SELECT * FROM posts ORDER BY id")
-    fun getAllPosts(): LiveData<List<Post>>
+    @Query("SELECT * FROM posts WHERE user_id = :userId ORDER BY id")
+    fun getAllPosts(userId: Int): LiveData<List<Post>>
 
-    @Query("SELECT * FROM posts WHERE favorite = 'true' ORDER BY id")
-    fun getFavoritePosts(): LiveData<List<Post>>
+    @Query("SELECT * FROM posts WHERE user_id = :userId AND favorite = 1 ORDER BY id")
+    fun getFavoritePosts(userId: Int): LiveData<List<Post>>
+
+    @Query("SELECT * FROM posts WHERE id = :id LIMIT 1")
+    suspend fun getPost(id: Int): Post?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPost(post: Post)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updatePost(post: Post)
 
 }
