@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">SimpleSenacor</string>
+    <string name="app_name">PostBook</string>
     <string name="user_id">UserID:</string>
     <string name="login">Login</string>
     <string name="my_posts">My Posts</string>
     <string name="all">All</string>
     <string name="favorites">Favorites</string>
+    <string name="comments">Comments</string>
 </resources>

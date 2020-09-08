@@ -12,22 +12,24 @@ data class Post(
     val id: Int,
     val title: String,
     val body: String,
-    val favorite: Boolean = false
+    val favorite: Boolean
 ): Diffable {
     override fun getId(): Any = id
 }
 
-class PostsViewHolder(
+class PostViewHolder(
     parent: ViewGroup,
-    private val onItemClick: (Post) -> Unit,
-    private val onFavoriteClick: (Post) -> Unit,
+    private val onItemClick: ((Post) -> Unit)?,
+    private val onFavoriteClick: ((Post) -> Unit)?
 ): BaseViewHolder<Post>(parent, R.layout.item_post) {
     override fun bind(item: Post) {
         itemView.title.setText(item.title)
         itemView.body.setText(item.body)
         itemView.favoriteButton.setImageResource(if (item.favorite) R.drawable.ic_baseline_star_24 else R.drawable.ic_baseline_star_border_24)
-        itemView.setOnClickListener { onItemClick(item) }
-        itemView.favoriteButton.setOnClickListener { onFavoriteClick(item.copy(favorite = !item.favorite)) }
+        if (onItemClick != null)
+            itemView.setOnClickListener { onItemClick.invoke(item) }
+        if (onFavoriteClick != null)
+            itemView.favoriteButton.setOnClickListener { onFavoriteClick.invoke(item.copy(favorite = !item.favorite)) }
     }
 }
 
@@ -36,7 +38,7 @@ class PostsAdapter(
     onFavoriteClick: (Post) -> Unit,
 ): BaseListAdapter<Post>(
     viewHolderCreator {
-        PostsViewHolder(
+        PostViewHolder(
             it,
             onItemClick,
             onFavoriteClick

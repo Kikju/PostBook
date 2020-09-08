@@ -2,7 +2,10 @@ package com.senacor.postbook.ui.posts
 
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
+import com.senacor.postbook.ui.abs.LceViewModel
 import kotlinx.coroutines.launch
 
 private const val USER_ID_SAVED_STATE_KEY = "USER_ID_SAVED_STATE_KEY"
@@ -11,15 +14,12 @@ private const val FAVORITE_SAVED_STATE_KEY = "FAVORITE_SAVED_STATE_KEY"
 class PostsViewModel @ViewModelInject constructor(
     private val postsRepository: PostsRepository,
     @Assisted private val savedState: SavedStateHandle
-): ViewModel() {
+): LceViewModel() {
 
     init {
         setFavorite(false)
+        refreshPosts()
     }
-
-    private val _loading: MutableLiveData<Boolean> = MutableLiveData()
-    val loading: LiveData<Boolean>
-        get() = _loading
 
     val posts = getFavorite().switchMap {
         if (it == true)
@@ -27,10 +27,6 @@ class PostsViewModel @ViewModelInject constructor(
         else
             postsRepository.getAllPosts(getUserId())
     }
-
-    private val _error: MutableLiveData<String> = MutableLiveData()
-    val error: LiveData<String?>
-        get() = _error
 
     fun setUserId(userId: Int) {
         savedState.set(USER_ID_SAVED_STATE_KEY, userId)
@@ -45,17 +41,8 @@ class PostsViewModel @ViewModelInject constructor(
     private fun getFavorite() = savedState.getLiveData<Boolean>(FAVORITE_SAVED_STATE_KEY)
 
     fun refreshPosts() {
-        viewModelScope.launch {
-            _error.value = null
-            _loading.value = true
-            try {
-                postsRepository.refreshPosts(getUserId())
-            } catch (e: Exception) {
-                e.printStackTrace()
-                _error.value = e.message
-            } finally {
-                _loading.value = false
-            }
+        loadContent {
+            postsRepository.refreshPosts(getUserId())
         }
     }
 

@@ -8,7 +8,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.senacor.postbook.R
 import com.senacor.postbook.util.hideKeyboard
-import com.senacor.postbook.util.showErrorIcon
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.login_fragment.*
 
@@ -23,7 +22,7 @@ class LoginFragment: Fragment(R.layout.login_fragment) {
         loginButton.setOnClickListener {
             val userIdText = userIdEditText.text.toString()
             if (userIdText.isEmpty() || !userIdText.isDigitsOnly()) {
-                userIdInputLayout.showErrorIcon("Please provide valid user id")
+                userIdInputLayout.error = "Please provide valid user id"
                 return@setOnClickListener
             }
             userIdEditText.hideKeyboard()

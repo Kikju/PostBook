@@ -12,7 +12,6 @@
         android:label="@string/login"
         tools:layout="@layout/login_fragment"
         >
-
         <action
             android:id="@+id/action_loginFragment_to_postsFragment"
             app:destination="@id/postsFragment"
@@ -22,9 +21,26 @@
         android:id="@+id/postsFragment"
         android:name="com.senacor.postbook.ui.posts.PostsFragment"
         android:label="PostsFragment"
+        tools:layout="@layout/posts_fragment"
         >
         <argument
             android:name="userId"
+            app:argType="integer"
+            />
+        <action
+            android:id="@+id/action_postsFragment_to_commentsFragment"
+            app:destination="@id/commentsFragment"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/commentsFragment"
+        android:name="com.senacor.postbook.ui.comments.CommentsFragment"
+        android:label="CommentsFragment"
+        tools:layout="@layout/comments_fragment"
+        >
+        <argument
+            android:name="postId"
             app:argType="integer"
             />
     </fragment>

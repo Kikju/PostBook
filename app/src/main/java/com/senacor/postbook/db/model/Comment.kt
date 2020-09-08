@@ -12,19 +12,19 @@ import androidx.room.*
 )
 data class Comment(
     @ColumnInfo(name = "post_id") val postId: Int?,
-    @PrimaryKey val id: Int?,
-    val name: String?,
-    val email: String?,
-    val body: String?
+    @PrimaryKey val id: Int,
+    val name: String,
+    val email: String,
+    val body: String
 )
 
 @Dao
 interface CommentDao {
 
     @Query("SELECT * FROM comments WHERE post_id = :postId ORDER BY id")
-    fun getAllPosts(postId: Int): LiveData<List<Comment>>
+    fun getAllComments(postId: Int): LiveData<List<Comment>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertComment(post: Comment)
 
 }
