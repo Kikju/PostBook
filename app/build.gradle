@@ -133,11 +133,23 @@ dependencies {
     implementation "com.google.android.material:material:1.3.0-alpha02"
 
     testImplementation 'junit:junit:4.13'
+
+    androidTestImplementation 'androidx.test:core:1.3.0'
+
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test:rules:1.3.0'
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.ext:truth:1.3.0'
+    androidTestImplementation 'com.google.truth:truth:1.0'
+
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
     testImplementation("com.squareup.okhttp3:mockwebserver:$okHttp")
     testImplementation "org.jetbrains.kotlin:kotlin-test"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9"
 
     // For instrumentation tests
     androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"

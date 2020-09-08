@@ -12,7 +12,6 @@ abstract class LceViewModel: ViewModel() {
     val loading: LiveData<Boolean>
         get() = _loading
 
-
     protected val _error: MutableLiveData<String> = MutableLiveData()
     val error: LiveData<String?>
         get() = _error
