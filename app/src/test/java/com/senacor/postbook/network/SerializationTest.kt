@@ -1,8 +1,7 @@
 package com.senacor.postbook.network
 
+import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.Serializable
-import org.hamcrest.CoreMatchers.equalTo
-import org.junit.Assert.assertThat
 import org.junit.Test
 import org.reflections.Reflections
 import org.reflections.scanners.SubTypesScanner
@@ -24,7 +23,7 @@ class SerializationTest {
         val classes = r.getSubTypesOf(Any::class.java).filter { !it.name.contains("$") }
 
         classes.forEach {
-            assertThat(it.isAnnotationPresent(Serializable::class.java), equalTo(true))
+            assertThat(it.isAnnotationPresent(Serializable::class.java)).isTrue()
         }
     }
 }

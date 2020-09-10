@@ -4,14 +4,13 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.common.truth.Truth.assertThat
 import com.senacor.postbook.db.model.Post
 import com.senacor.postbook.db.model.PostDao
 import com.senacor.postbook.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.hamcrest.CoreMatchers.equalTo
 import org.junit.After
-import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -64,7 +63,7 @@ class PostDaoTest {
         dao.insertPost(post)
         val postFromDb = dao.getPost(1)
 
-        assertThat(postFromDb, equalTo(post))
+        assertThat(postFromDb).isEqualTo(post)
     }
 
     @Test
@@ -73,7 +72,7 @@ class PostDaoTest {
         dao.insertPost(post)
         val postFromDb = dao.getPost(2)
 
-        assertThat(postFromDb, equalTo(null))
+        assertThat(postFromDb).isNull()
     }
 
     @Test
@@ -81,29 +80,29 @@ class PostDaoTest {
         dao.insertPost(newNonFavoritePost())
         dao.insertPost(newFavoritePost().copy(userId = 1))
         val posts = dao.getAllPosts(1).getOrAwaitValue()
-        assertThat(posts.size, equalTo(2))
-        assertThat(posts[0].id, equalTo(1))
-        assertThat(posts[1].id, equalTo(2))
+        assertThat(posts).hasSize(2)
+        assertThat(posts[0].id).isEqualTo(1)
+        assertThat(posts[1].id).isEqualTo(2)
     }
 
     @Test
     fun getFavoritePosts() = runBlockingTest {
         dao.insertPost(newNonFavoritePost())
         dao.insertPost(newFavoritePost())
-        assertThat(dao.getFavoritePosts(1).getOrAwaitValue().size, equalTo(0))
-        assertThat(dao.getFavoritePosts(2).getOrAwaitValue().size, equalTo(1))
+        assertThat(dao.getFavoritePosts(1).getOrAwaitValue()).isEmpty()
+        assertThat(dao.getFavoritePosts(2).getOrAwaitValue()).hasSize(1)
     }
 
     @Test
     fun updatePosts() = runBlockingTest {
         dao.insertPost(newNonFavoritePost())
         dao.insertPost(newFavoritePost())
-        assertThat(dao.getFavoritePosts(1).getOrAwaitValue().size, equalTo(0))
-        assertThat(dao.getFavoritePosts(2).getOrAwaitValue().size, equalTo(1))
+        assertThat(dao.getFavoritePosts(1).getOrAwaitValue()).isEmpty()
+        assertThat(dao.getFavoritePosts(2).getOrAwaitValue()).hasSize(1)
         val post = dao.getPost(1)!!
         dao.updatePost(post.copy(favorite = true))
-        assertThat(dao.getFavoritePosts(1).getOrAwaitValue().size, equalTo(1))
-        assertThat(dao.getFavoritePosts(2).getOrAwaitValue().size, equalTo(1))
+        assertThat(dao.getFavoritePosts(1).getOrAwaitValue()).hasSize(1)
+        assertThat(dao.getFavoritePosts(2).getOrAwaitValue()).hasSize(1)
     }
 
 }

@@ -1,6 +1,7 @@
 package com.senacor.postbook.network
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.google.common.truth.Truth.assertThat
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.senacor.postbook.di.AppModule
 import com.senacor.postbook.network.model.Comment
@@ -12,9 +13,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import org.hamcrest.CoreMatchers.equalTo
 import org.junit.After
-import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -57,18 +56,16 @@ class AppApiTest {
 
         val response = runBlocking { api.getPosts(null) }
 
-        assertThat(response.size, equalTo(100))
-        assertThat(response[0].userId, equalTo(1))
-        assertThat(response[0].id, equalTo(1))
+        assertThat(response).hasSize(100)
+        assertThat(response[0].userId).isEqualTo(1)
+        assertThat(response[0].id).isEqualTo(1)
 
-        assertThat(
-            response[1], equalTo(
-                Post(
-                    1,
-                    2,
-                    "qui est esse",
-                    "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla"
-                )
+        assertThat(response[1]).isEqualTo(
+            Post(
+                1,
+                2,
+                "qui est esse",
+                "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla"
             )
         )
     }
@@ -83,18 +80,16 @@ class AppApiTest {
 
         val response = runBlocking { api.getPosts(1) }
 
-        assertThat(response.size, equalTo(10))
-        assertThat(response[0].userId, equalTo(1))
-        assertThat(response[0].id, equalTo(1))
+        assertThat(response).hasSize(10)
+        assertThat(response[0].userId).isEqualTo(1)
+        assertThat(response[0].id).isEqualTo(1)
 
-        assertThat(
-            response[1], equalTo(
-                Post(
-                    1,
-                    2,
-                    "qui est esse",
-                    "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla"
-                )
+        assertThat(response[1]).isEqualTo(
+            Post(
+                1,
+                2,
+                "qui est esse",
+                "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla"
             )
         )
     }
@@ -110,19 +105,17 @@ class AppApiTest {
 
         val response = runBlocking { api.getComments(1) }
 
-        assertThat(response.size, equalTo(5))
-        assertThat(response[0].postId, equalTo(1))
-        assertThat(response[0].id, equalTo(1))
+        assertThat(response).hasSize(5)
+        assertThat(response[0].postId).isEqualTo(1)
+        assertThat(response[0].id).isEqualTo(1)
 
-        assertThat(
-            response[1], equalTo(
-                Comment(
-                    1,
-                    2,
-                    "quo vero reiciendis velit similique earum",
-                    "Jayne_Kuhic@sydney.com",
-                    "est natus enim nihil est dolore omnis voluptatem numquam\net omnis occaecati quod ullam at\nvoluptatem error expedita pariatur\nnihil sint nostrum voluptatem reiciendis et"
-                )
+        assertThat(response[1]).isEqualTo(
+            Comment(
+                1,
+                2,
+                "quo vero reiciendis velit similique earum",
+                "Jayne_Kuhic@sydney.com",
+                "est natus enim nihil est dolore omnis voluptatem numquam\net omnis occaecati quod ullam at\nvoluptatem error expedita pariatur\nnihil sint nostrum voluptatem reiciendis et"
             )
         )
     }

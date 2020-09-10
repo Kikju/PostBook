@@ -5,6 +5,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.common.truth.Truth.assertThat
 import com.senacor.postbook.db.model.Comment
 import com.senacor.postbook.db.model.CommentDao
 import com.senacor.postbook.db.model.Post
@@ -12,9 +13,7 @@ import com.senacor.postbook.db.model.PostDao
 import com.senacor.postbook.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.hamcrest.CoreMatchers.equalTo
 import org.junit.After
-import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -61,9 +60,9 @@ class CommentDaoTest {
         commentDao.insertComment(newComment())
         commentDao.insertComment(newComment(1, 2))
         val comments = commentDao.getAllComments(1).getOrAwaitValue()
-        assertThat(comments.size, equalTo(2))
-        assertThat(comments[0].id, equalTo(1))
-        assertThat(comments[1].id, equalTo(2))
+        assertThat(comments).hasSize(2)
+        assertThat(comments[0].id).isEqualTo(1)
+        assertThat(comments[1].id).isEqualTo(2)
     }
 
     @Test(expected = SQLiteConstraintException::class)
