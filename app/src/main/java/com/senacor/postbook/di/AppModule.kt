@@ -7,6 +7,10 @@ import com.senacor.postbook.db.AppDatabase
 import com.senacor.postbook.db.model.CommentDao
 import com.senacor.postbook.db.model.PostDao
 import com.senacor.postbook.network.AppApi
+import com.senacor.postbook.ui.comments.CommentsRepository
+import com.senacor.postbook.ui.comments.CommentsRepositoryImpl
+import com.senacor.postbook.ui.posts.PostsRepository
+import com.senacor.postbook.ui.posts.PostsRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -55,5 +59,20 @@ object AppModule {
     @Provides
     @Singleton
     fun provideCommentsDao(db: AppDatabase): CommentDao = db.commentsDao()
+
+    @Provides
+    @Singleton
+    fun providePostsRepository(
+        postsDao: PostDao,
+        appApi: AppApi
+    ): PostsRepository = PostsRepositoryImpl(postsDao, appApi)
+
+    @Provides
+    @Singleton
+    fun provideCommentsRepository(
+        postsDao: PostDao,
+        commentDao: CommentDao,
+        appApi: AppApi
+    ): CommentsRepository = CommentsRepositoryImpl(postsDao, commentDao, appApi)
 
 }

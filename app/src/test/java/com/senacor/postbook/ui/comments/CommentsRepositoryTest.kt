@@ -34,14 +34,13 @@ class CommentsRepositoryTest {
         }
         val commentsDao = mock<CommentDao>()
         val appApi = mock<AppApi>()
-        val repository = CommentsRepository(postsDao, commentsDao, appApi)
+        val repository = CommentsRepositoryImpl(postsDao, commentsDao, appApi)
 
         val postFromRepository = repository.getPost(1).getOrAwaitValue()
 
         assertThat(postFromRepository).isNotNull()
         assertThat(postFromRepository).isEqualTo(Post(1, 1, "title", "body", true))
     }
-
 
     @Test
     fun testGetComments() {
@@ -51,7 +50,7 @@ class CommentsRepositoryTest {
             on { getAllComments(any()) } doReturn liveData
         }
         val appApi = mock<AppApi>()
-        val repository = CommentsRepository(postsDao, commentsDao, appApi)
+        val repository = CommentsRepositoryImpl(postsDao, commentsDao, appApi)
 
         val commentToLiveData = Comment(1, 1, "name", "email", "body")
         liveData.value = listOf(commentToLiveData)
@@ -73,7 +72,7 @@ class CommentsRepositoryTest {
         val appApi = mock<AppApi> {
             onBlocking { getComments(any()) } doReturn networkComments
         }
-        val repository = CommentsRepository(postsDao, commentsDao, appApi)
+        val repository = CommentsRepositoryImpl(postsDao, commentsDao, appApi)
 
         runBlocking { repository.refreshComments(1) }
 

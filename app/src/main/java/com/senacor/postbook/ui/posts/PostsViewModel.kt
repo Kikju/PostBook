@@ -18,7 +18,6 @@ class PostsViewModel @ViewModelInject constructor(
 
     init {
         setFavorite(false)
-        refreshPosts()
     }
 
     val posts = getFavorite().switchMap {

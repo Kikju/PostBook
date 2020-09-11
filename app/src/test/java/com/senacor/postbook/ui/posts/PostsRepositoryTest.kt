@@ -26,7 +26,7 @@ class PostsRepositoryTest {
             on { getAllPosts(any()) } doReturn liveData
         }
         val appApi = mock<AppApi>()
-        val repository = PostsRepository(postsDao, appApi)
+        val repository = PostsRepositoryImpl(postsDao, appApi)
 
         val postToLiveData = Post(1, 1, "", "", false)
         liveData.value = listOf(postToLiveData)
@@ -44,7 +44,7 @@ class PostsRepositoryTest {
             on { getFavoritePosts(any()) } doReturn liveData
         }
         val appApi = mock<AppApi>()
-        val repository = PostsRepository(postsDao, appApi)
+        val repository = PostsRepositoryImpl(postsDao, appApi)
 
         val postToLiveData = Post(1, 1, "", "", false)
         liveData.value = listOf(postToLiveData)
@@ -70,7 +70,7 @@ class PostsRepositoryTest {
             onBlocking { getPosts(any()) } doReturn networkPosts
         }
 
-        val repository = PostsRepository(postsDao, appApi)
+        val repository = PostsRepositoryImpl(postsDao, appApi)
 
         runBlocking { repository.refreshPosts(1) }
 
@@ -83,7 +83,7 @@ class PostsRepositoryTest {
     fun testUpdatePost() {
         val postsDao = mock<PostDao>()
         val appApi = mock<AppApi>()
-        val repository = PostsRepository(postsDao, appApi)
+        val repository = PostsRepositoryImpl(postsDao, appApi)
 
         val uiPost = UiPost(23, "title", "body", true)
         runBlocking { repository.updatePost(11, uiPost) }
